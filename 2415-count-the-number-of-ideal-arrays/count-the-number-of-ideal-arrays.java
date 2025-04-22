@@ -1,41 +1,43 @@
+import java.math.BigInteger;
+
 class Solution {
-    static final int MOD = 1_000_000_007;
-    static final int MAX = 10010;
-    long[][] comb = new long[MAX][20];
+	public static final int MODULO = (int) 1e9 + 7;
 
-    public int idealArrays(int n, int maxValue) {
-        // Precompute combinations C[n][k] = nCk
-        for (int i = 0; i < MAX; i++) {
-            comb[i][0] = 1;
-            for (int j = 1; j < 20 && j <= i; j++) {
-                comb[i][j] = (comb[i - 1][j] + comb[i - 1][j - 1]) % MOD;
-            }
-        }
-
-        // dp[val][len] = number of sequences of length len ending with val
-        int maxLen = 14; // log2(10^4) = 14
-        long[][] dp = new long[maxValue + 1][maxLen + 1];
-        
-        // Initialize: len=1
-        for (int i = 1; i <= maxValue; i++) {
-            dp[i][1] = 1;
-        }
-
-        for (int len = 2; len <= maxLen; len++) {
-            for (int i = 1; i <= maxValue; i++) {
-                for (int j = 2 * i; j <= maxValue; j += i) {
-                    dp[j][len] = (dp[j][len] + dp[i][len - 1]) % MOD;
-                }
-            }
-        }
-
-        long result = 0;
-        for (int val = 1; val <= maxValue; val++) {
-            for (int len = 1; len <= maxLen; len++) {
-                result = (result + dp[val][len] * comb[n - 1][len - 1]) % MOD;
-            }
-        }
-
-        return (int) result;
-    }
+	public static int idealArrays(int n, int maxValue) {
+		int[] minDivisor = new int[maxValue + 1];
+		for (int p = 2; p <= maxValue; p++) {
+			if (minDivisor[p] != 0)
+				continue;
+			for (int i = p; i <= maxValue; i += p)
+				if (minDivisor[i] == 0)
+					minDivisor[i] = p;
+		}
+		
+		int maxPow = (int) (Math.log(maxValue) / Math.log(2));
+		int[] binCoeff = new int[maxPow + 1];
+		BigInteger b = BigInteger.ONE;
+		BigInteger bigMod = BigInteger.valueOf(MODULO);
+		for (int i = 1; i <= maxPow; i++) {
+			b = b.multiply(BigInteger.valueOf(n + i - 1));
+			b = b.divide(BigInteger.valueOf(i));
+			binCoeff[i] = b.mod(bigMod).intValue();
+		}
+		
+		int s = 0;
+		for (int i = 1; i <= maxValue; i++) {
+			int x = i;
+			long prodBin = 1;
+			while (x > 1) {
+				int p = minDivisor[x];
+				int w = 0;
+				do {
+					w++;
+					x /= p;
+				} while (x % p == 0);
+				prodBin = prodBin * binCoeff[w] % MODULO;
+			}
+			s = (s + (int) prodBin) % MODULO;
+		}
+		return s;
+	}
 }
