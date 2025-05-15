@@ -4,8 +4,8 @@ class Solution {
         int last = -1;
         for (int i = 0; i < words.length; i++) {
             if (groups[i] != last) {
-                result.add(words[i]);
                 last = groups[i];
+                result.add(words[i]);
             }
         }
         return result;
