@@ -1,69 +1,36 @@
-class Solution 
-{
-    Stack<Integer> stack ;
-    int num;
-    public int calculate(String s) 
-    {
-        stack = new Stack<>();
-        num = 0;
-        char op ='+';
-        for(int i =0;i<s.length();i++)
-        {
+class Solution {
+    public int calculate(String s) {
+        Stack<Integer> stack = new Stack<>();
+        int num = 0;
+        char sign = '+';
+        int n = s.length();
+
+        for (int i = 0; i < n; i++) {
             char ch = s.charAt(i);
-            if('0' <= ch && ch <= '9')
-            {
-                num = (num * 10)+ch - '0';
+            if (Character.isDigit(ch)) {
+                num = num * 10 + (ch - '0');
             }
-            else if(ch == '+')
-            {
-                operate(op);
-                op = ch;
+            if ((!Character.isDigit(ch) && ch != ' ') || i == n - 1) {
+                if (sign == '+') {
+                    stack.push(num);
+                } else if (sign == '-') {
+                    stack.push(-num);
+                } else if (sign == '*') {
+                    stack.push(stack.pop() * num);
+                } else if (sign == '/') {
+                    stack.push(stack.pop() / num);
+                }
+                sign = ch;
+                num = 0;
             }
-            else if(ch == '-')
-            {
-                operate(op);
-                op = ch;
-            }
-            else if(ch == '*')
-            {
-                operate(op);
-                op = ch;
-            }
-            else if(ch == '/')
-            {
-                operate(op);
-                op = ch;
-            }
-        }    
-        operate(op);
-        int sum =0;
-        for(int i : stack)
-            sum += i;
-        return sum;
+        }
+
+        int result = 0;
+        for (int val : stack) {
+            result += val;
+        }
+
+        return result;
     }
-    public void operate(char ch)
-    {
-        if(ch == '+')
-        {
-            stack.push(num);
-            num = 0;
-        }
-        else if(ch == '-')
-        {
-            stack.push(num * (-1));
-            num = 0;
-        }
-        else if(ch == '*')
-        {
-            int n2 = stack.pop();
-            stack.push(num * n2);
-            num =0;
-        }
-        else
-        {
-            int n2 = stack.pop();
-            stack.push(n2 / num);
-            num =0;
-        }
-    }
+
 }
