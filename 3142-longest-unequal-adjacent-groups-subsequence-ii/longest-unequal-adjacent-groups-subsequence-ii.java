@@ -1,44 +1,43 @@
 class Solution {
     public List<String> getWordsInLongestSubsequence(String[] words, int[] groups) {
-        Map<String, List<String>> memo = new HashMap<>();
         int n = words.length;
-        List<String> best = new ArrayList<>();
+        Map<Long, List<Integer>> map = new HashMap();
+        
+        int[] ansNext = new int[n];
+        int[] lengths = new int[n];
+        
+        int ansIndex = 0;
 
-        for (int i = 0; i < n; i++) {
-            List<String> res = new ArrayList<>();
-            res.add(words[i]);
-            res.addAll(helper(i + 1, groups[i], words[i], words, groups, memo));
-            if (res.size() > best.size()) best = res;
+        Arrays.fill(ansNext, n);
+
+        for (int left = n - 1; left >= 0; left--) {
+            String word = words[left];
+            int len = word.length();
+            int res = 1;
+            long completeMask = 0l;
+            long[] masks = new long[len];
+            for (int i = 0; i < len; i++) {
+                completeMask |= masks[i] = (long)(word.charAt(i) - 'a' + 1) << (5 * i);
+            }
+            for (int i = 0; i < len; i++) {
+                long targetMask = completeMask ^ masks[i];
+                List<Integer> queue = map.computeIfAbsent​(targetMask, (j) -> new ArrayList());
+                for (int idx : queue) {
+                    if (res >= lengths[idx] + 1 || groups[idx] == groups[left] ) continue;
+                    res = lengths[idx] + 1;
+                    ansNext[left] = idx;
+                }
+                queue.add(left);
+            }
+            lengths[left] = res;
+            if (lengths[ansIndex] < res) ansIndex = left;
         }
 
-        return best;
-    }
-
-    private List<String> helper(int i, int lastGroup, String lastWord,
-        String[] words, int[] groups, Map<String, List<String>> memo) {
-        if (i >= words.length) return new ArrayList<>();
-        String key = i + "|" + lastGroup + "|" + lastWord;
-        if (memo.containsKey(key)) return memo.get(key);
-
-        List<String> take = new ArrayList<>();
-        if (words[i].length() == lastWord.length() &&
-            hamming(words[i], lastWord) &&
-            groups[i] != lastGroup) {
-            take.add(words[i]);
-            take.addAll(helper(i + 1, groups[i], words[i], words, groups, memo));
+        List<String> ans = new ArrayList(lengths[ansIndex]);
+        for (int i = ansIndex; i < n; i = ansNext[i]) {
+            ans.add(words[i]);
         }
 
-        List<String> skip = helper(i + 1, lastGroup, lastWord, words, groups, memo);
-        List<String> result = take.size() > skip.size() ? take : skip;
-        memo.put(key, result);
-        return result;
-    }
-
-    private boolean hamming(String a, String b) {
-        int diff = 0;
-        for (int i = 0; i < a.length(); i++) {
-            if (a.charAt(i) != b.charAt(i)) diff++;
-        }
-        return diff == 1;
+        return ans;
     }
 }
