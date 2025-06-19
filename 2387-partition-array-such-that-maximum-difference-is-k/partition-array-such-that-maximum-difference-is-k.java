@@ -7,7 +7,6 @@ public class Solution {
 
         for (int i = 1; i < nums.length; i++) {
             if (nums[i] - start > k) {
-                
                 count++;
                 start = nums[i];
             }
