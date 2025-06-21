@@ -1,35 +1,26 @@
-import java.util.*;
-
-public class Solution {
+class Solution {
     public int minimumDeletions(String word, int k) {
-        Map<Character, Integer> freqMap = new HashMap<>();
-        for (char ch : word.toCharArray()) {
-            freqMap.put(ch, freqMap.getOrDefault(ch, 0) + 1);
+        int [] freq = new int[26];
+        for(int i =0;i<word.length();i++){
+            freq[word.charAt(i)-'a']++;
         }
-
-        List<Integer> freqs = new ArrayList<>(freqMap.values());
-        Collections.sort(freqs);
-
-        int n = freqs.size();
-        int minDeletions = Integer.MAX_VALUE;
-
-        for (int i = 0; i < n; i++) {
-            int base = freqs.get(i);
-            int maxAllowed = base + k;
-            int deletions = 0;
-
-            for (int j = 0; j < n; j++) {
-                int f = freqs.get(j);
-                if (f < base) {
-                    deletions += f; 
-                } else if (f > maxAllowed) {
-                    deletions += f - maxAllowed; 
+        int deletion = Integer.MAX_VALUE;
+        for(int i =0;i<26;i++){
+            if(freq[i]==0) continue;
+            int delete = 0;
+            int curr = freq[i];
+            for(int j =0;j<26;j++){
+                if(freq[j]==0)continue;
+                if(i==j) continue;
+                if(freq[j]<curr){
+                    delete+=freq[j];
+                }
+                else if(Math.abs(freq[j]-curr)>k){
+                    delete+=Math.abs(freq[j]-curr)-k;
                 }
             }
-
-            minDeletions = Math.min(minDeletions, deletions);
+            deletion = Math.min(deletion,delete);
         }
-
-        return minDeletions;
+        return deletion;
     }
 }
