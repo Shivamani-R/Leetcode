@@ -3,11 +3,13 @@ class Solution {
         int count = 0;
 
         for (int i = 0; i < s.length() - 2; i++) {
-            char a = s.charAt(i);
-            char b = s.charAt(i + 1);
-            char c = s.charAt(i + 2);
+            Set<Character> set = new HashSet<>();
+            set.add(s.charAt(i));
+            set.add(s.charAt(i + 1));
+            set.add(s.charAt(i + 2));
 
-            if (a != b && b != c && a != c) {
+            
+            if (set.size() == 3) {
                 count++;
             }
         }
