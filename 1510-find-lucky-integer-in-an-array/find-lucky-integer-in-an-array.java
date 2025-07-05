@@ -1,13 +1,13 @@
 class Solution {
     public int findLucky(int[] arr) {
         int max = -1;
-        HashMap<Integer, Integer> freqMap = new HashMap<>();
+        HashMap<Integer, Integer> x = new HashMap<>();
 
         for (int i = 0; i < arr.length; i++) {
-            freqMap.put(arr[i], freqMap.getOrDefault(arr[i], 0) + 1);
+            x.put(arr[i], x.getOrDefault(arr[i], 0) + 1);
         }
 
-        for (Map.Entry<Integer, Integer> entry : freqMap.entrySet()) {
+        for (Map.Entry<Integer, Integer> entry : x.entrySet()) {
             int key = entry.getKey();
             int value = entry.getValue();
 
