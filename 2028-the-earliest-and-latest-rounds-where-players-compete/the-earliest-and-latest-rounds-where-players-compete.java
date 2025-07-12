@@ -1,8 +1,5 @@
-public class Solution 
-{
-    public int[] earliestAndLatest(int n, int firstPlayer, int secondPlayer) 
-    {
-        
+class Solution {
+    public int[] earliestAndLatest(int n, int firstPlayer, int secondPlayer) {
         int p1 = Math.min(firstPlayer, secondPlayer);
         int p2 = Math.max(firstPlayer, secondPlayer);
 
