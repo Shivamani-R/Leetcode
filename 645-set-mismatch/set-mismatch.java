@@ -1,20 +1,19 @@
 class Solution {
     public int[] findErrorNums(int[] nums) {
-    int n = nums.length;
-    int actualSum = 0;
-    int expectedSum = n * (n + 1) / 2;
-    Set<Integer> seen = new HashSet<>();
-    int duplicate = -1;
+        int n = nums.length;
+        int[] freq = new int[n + 1]; 
+        int[] ans = new int[2];     
 
-    for (int num : nums) {
-        if (seen.contains(num)) {
-            duplicate = num;
+      
+        for (int i = 0; i < n; i++) {
+            freq[nums[i]]++;
         }
-        seen.add(num);
-        actualSum += num;
-    }
 
-    int missing = expectedSum - (actualSum - duplicate);
-    return new int[]{duplicate, missing};
+        for (int i = 1; i <= n; i++) {
+            if (freq[i] == 2) ans[0] = i; 
+            if (freq[i] == 0) ans[1] = i; 
+        }
+
+        return ans;
     }
 }
