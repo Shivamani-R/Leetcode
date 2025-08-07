@@ -1,18 +1,15 @@
 class Solution {
     public int countAsterisks(String s) {
-        int n = s.length();
-        boolean found = false;
-        int countAsterik = 0;
-        
-        for(int i=0;i<n;i++){
-            char ch = s.charAt(i);
-            if(ch == '|' ){
-                found = !found;
+        int c=0;
+        boolean flag=false;
+        for(char z:s.toCharArray()){
+            if(z=='|'){
+                flag=!flag;
             }
-            if(ch == '*' && found == false){
-                countAsterik++;
+            else if(z=='*'&& flag==false){
+                c++;
             }
         }
-        return countAsterik;
+      return c;  
     }
 }
