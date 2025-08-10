@@ -1,19 +1,20 @@
 class Solution {
-    public boolean reorderedPowerOf2(int n) {
-        String sortedN = sortDigits(n);
-        
-        for (int i = 0; i < 31; i++) { 
-            int power = 1 << i;
-            if (sortedN.equals(sortDigits(power))) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    private String sortDigits(int num) {
-        char[] arr = String.valueOf(num).toCharArray();
-        java.util.Arrays.sort(arr);
-        return new String(arr);
-    }
+  public boolean reorderedPowerOf2(int n) {
+    int count = counter(n);
+
+    for (int i = 0; i < 30; ++i)
+      if (counter(1 << i) == count)
+        return true;
+
+    return false;
+  }
+
+  private int counter(int n) {
+    int count = 0;
+
+    for (; n > 0; n /= 10)
+      count += Math.pow(10, n % 10);
+
+    return count;
+  }
 }
