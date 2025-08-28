@@ -9,27 +9,24 @@ class Solution {
 
         return solve(s,0,n-1);
     }
+    private static int solve(String s , int i , int j){
+        if(i>=j || isPal(s,i,j)) return 0;
 
-   private static int solve(String s, int i, int j) {
-        if (i >= j || isPalindrome(s, i, j)) return 0;
-
-        if (dp[i][j] != -1) return dp[i][j];
-
+        if(dp[i][j] != -1) return dp[i][j];
         int min = Integer.MAX_VALUE;
 
-        for (int k = i; k < j; k++) {
-            if (isPalindrome(s, i, k)) { 
-                int cost = 1 + solve(s, k + 1, j);
-                min = Math.min(min, cost);
+        for(int k=i;k<j;k++){
+            if(isPal(s,i,k)){
+                int cost = 1 + solve(s,k+1,j);
+                min = Math.min(min,cost);
             }
         }
-
         return dp[i][j] = min;
     }
 
-    private static boolean isPalindrome(String s, int i, int j) {
-        while (i < j) {
-            if (s.charAt(i) != s.charAt(j)) return false;
+    private static boolean isPal(String s,int i,int j){
+        while(i<j){
+            if(s.charAt(i)!=s.charAt(j)) return false;
             i++;
             j--;
         }
