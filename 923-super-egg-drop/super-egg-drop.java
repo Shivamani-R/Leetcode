@@ -1,29 +1,38 @@
 class Solution {
     static int[][] dp;
-
-public int superEggDrop(int k, int n) {
-    dp = new int[k + 1][n + 1];
-    for (int[] row : dp) Arrays.fill(row, -1);
-    return solve(k, n);
-}
-
-private int solve(int eggs, int floors) {
-    if (floors == 0 || floors == 1) return floors;
-    if (eggs == 1) return floors;
-    if (dp[eggs][floors] != -1) return dp[eggs][floors];
-
-    int low = 1, high = floors, minMoves = Integer.MAX_VALUE;
-    while (low <= high) {
-        int mid = (low + high) / 2;
-        int breakCase = solve(eggs - 1, mid - 1);
-        int notBreakCase = solve(eggs, floors - mid);
-        int worst = 1 + Math.max(breakCase, notBreakCase);
-        minMoves = Math.min(minMoves, worst);
-
-        if (breakCase > notBreakCase) high = mid - 1;
-        else low = mid + 1;
+    
+    static int superEggDrop(int n, int k) {
+        dp = new int[n+1][k+1];
+        for (int[] row : dp) {
+            Arrays.fill(row, -1);
+        }
+        return solve(n, k);
     }
-    return dp[eggs][floors] = minMoves;
-}
-
+    
+    private static int solve(int n, int k) {
+        if (k == 0 || k == 1) return k;
+        if (n == 1) return k;
+        
+        if (dp[n][k] != -1) return dp[n][k];
+        
+        int low = 1, high = k, ans = Integer.MAX_VALUE;
+        
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            
+            int breakCase = solve(n - 1, mid - 1);
+            int surviveCase = solve(n, k - mid);
+            
+            int worst = 1 + Math.max(breakCase, surviveCase);
+            ans = Math.min(ans, worst);
+            
+            if (breakCase > surviveCase) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        
+        return dp[n][k] = ans;
+    }
 }
