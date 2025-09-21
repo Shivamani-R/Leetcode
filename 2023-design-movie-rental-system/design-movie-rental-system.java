@@ -58,24 +58,24 @@ class MovieRentingSystem {
     public void rent(int shop, int movie) {
         long k = key(shop, movie);
         Node node = byPair.get(k);
-        if (node == null) return; 
+        if (node == null) return; // defensive
         TreeSet<Node> set = availableByMovie.get(movie);
         if (set != null) set.remove(node);
         rentedSet.add(node);
     }
 
-
+    // Move (shop,movie) from rented -> available
     public void drop(int shop, int movie) {
         long k = key(shop, movie);
         Node node = byPair.get(k);
-        if (node == null) return; 
+        if (node == null) return; // defensive
         rentedSet.remove(node);
         availableByMovie
             .computeIfAbsent(movie, x -> new TreeSet<>(CMP))
             .add(node);
     }
 
-
+    // Return up to 5 rented copies [shop, movie], cheapest then shop asc, then movie asc.
     public List<List<Integer>> report() {
         List<List<Integer>> ans = new ArrayList<>(5);
         Iterator<Node> it = rentedSet.iterator();
@@ -86,3 +86,12 @@ class MovieRentingSystem {
         return ans;
     }
 }
+
+/**
+ * Your MovieRentingSystem object will be instantiated and called as such:
+ * MovieRentingSystem obj = new MovieRentingSystem(n, entries);
+ * List<Integer> param_1 = obj.search(movie);
+ * obj.rent(shop,movie);
+ * obj.drop(shop,movie);
+ * List<List<Integer>> param_4 = obj.report();
+ */
