@@ -1,30 +1,36 @@
 class Solution {
     public String longestPalindrome(String s) {
-        if (s == null || s.length() < 1)
-            return "";
+        if (s == null || s.length() == 0) return "";
 
-        int start = 0, end = 0;
+        int resStart = 0;   // starting index of result substring
+        int resLen = 0;     // length of result substring
 
         for (int i = 0; i < s.length(); i++) {
-            int len1 = expandAroundCenter(s, i, i);
-            int len2 = expandAroundCenter(s, i, i + 1);
-            int len = Math.max(len1, len2);
+            // odd length palindromes
+            int l = i, r = i;
+            while (l >= 0 && r < s.length() && s.charAt(l) == s.charAt(r)) {
+                if ((r - l + 1) > resLen) {
+                    resLen = r - l + 1;
+                    resStart = l;
+                }
+                l--;
+                r++;
+            }
 
-            if (len > end - start) {
-                start = i - (len - 1) / 2;
-                end = i + len / 2;
+            // even length palindromes
+            l = i;
+            r = i + 1;
+            while (l >= 0 && r < s.length() && s.charAt(l) == s.charAt(r)) {
+                if ((r - l + 1) > resLen) {
+                    resLen = r - l + 1;
+                    resStart = l;
+                }
+                l--;
+                r++;
             }
         }
 
-        return s.substring(start, end + 1);
-    }
-
-    private int expandAroundCenter(String s, int left, int right) {
-        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
-            left--;
-            right++;
-        }
-
-        return right - left - 1;
+        // return substring from resStart with length resLen
+        return s.substring(resStart, resStart + resLen);
     }
 }
