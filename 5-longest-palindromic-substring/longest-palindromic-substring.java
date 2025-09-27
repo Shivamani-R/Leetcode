@@ -2,11 +2,11 @@ class Solution {
     public String longestPalindrome(String s) {
         if (s == null || s.length() == 0) return "";
 
-        int resStart = 0;   // starting index of result substring
-        int resLen = 0;     // length of result substring
+        int resStart = 0;   
+        int resLen = 0;     
 
         for (int i = 0; i < s.length(); i++) {
-            // odd length palindromes
+            
             int l = i, r = i;
             while (l >= 0 && r < s.length() && s.charAt(l) == s.charAt(r)) {
                 if ((r - l + 1) > resLen) {
@@ -17,7 +17,7 @@ class Solution {
                 r++;
             }
 
-            // even length palindromes
+            
             l = i;
             r = i + 1;
             while (l >= 0 && r < s.length() && s.charAt(l) == s.charAt(r)) {
@@ -30,7 +30,7 @@ class Solution {
             }
         }
 
-        // return substring from resStart with length resLen
+        
         return s.substring(resStart, resStart + resLen);
     }
 }
