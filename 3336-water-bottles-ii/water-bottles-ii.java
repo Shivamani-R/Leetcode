@@ -5,9 +5,9 @@ class Solution {
         
         while (empties >= numExchange) {
             empties -= numExchange; 
-            count++; 
             empties++; 
             numExchange++; 
+            count++; 
         }
         return count;
     }
