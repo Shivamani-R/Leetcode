@@ -13,11 +13,11 @@ class Solution {
     }
 
     private int lowerBound(int[] potions, long target) {
-        int l = 0, r = potions.length;
-        while (l < r) {
+        int l = 0, r = potions.length-1;
+        while (l <= r) {
             int mid = l + (r - l) / 2;
             if (potions[mid] < target) l = mid + 1;
-            else r = mid;
+            else r = mid-1;
         }
         return l;
     }
