@@ -1,34 +1,26 @@
 class Solution {
     public long maximumTotalDamage(int[] power) {
-        if (power == null || power.length == 0) return 0L;
+        Arrays.sort(power);
 
-        Map<Long, Long> map = new HashMap<>();
-        for (int p : power) {
-            long key = (long) p;
-            map.put(key, map.getOrDefault(key, 0L) + key);
+        long[] dp = new long[power.length];
+        long md = 0;
+        dp[0] = power[0];
+        for (int i = 1, j = 0; i < power.length; i++) {
+            if (power[i] == power[i-1]) {
+                dp[i] = dp[i-1]+power[i];
+            } else {
+                while (power[j]+2 < power[i]) {
+                    md = Math.max(md, dp[j]);
+                    j++;
+                }
+                dp[i] = md + power[i];
+            }
         }
-
-        List<Long> keys = new ArrayList<>(map.keySet());
-        Collections.sort(keys);
-
-        int n = keys.size();
-        long[] dp = new long[n];
-        dp[0] = map.get(keys.get(0));
-
-        for (int i = 1; i < n; i++) {
-            long curr = map.get(keys.get(i));
-            long target = keys.get(i) - 3;
-            int idx = Collections.binarySearch(keys, target);
-            int j;
-            if (idx >= 0) j = idx;
-            else j = -idx - 2;
-
-            long include = curr + (j >= 0 ? dp[j] : 0L);
-            long exclude = dp[i - 1];
-            dp[i] = Math.max(exclude, include);
+        
+        long max = 0;
+        for (long n : dp) {
+            max = Math.max(max, n);
         }
-
-        return dp[n - 1];
+        return max;
     }
-
 }
