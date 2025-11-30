@@ -1,33 +1,29 @@
 class Solution {
     public int minSubarray(int[] nums, int p) {
-        int n = nums.length;
-        int res_len = n;
+        long total = 0;
+        for (int x : nums) total += x;
+
+        int need = (int)(total % p);
+        if (need == 0) return 0;
 
         Map<Integer, Integer> map = new HashMap<>();
         map.put(0, -1);
 
-        long total_sum = 0; 
-        for (int num : nums) {
-            total_sum += num;
+        long prefix = 0;
+        int ans = nums.length;
+
+        for (int i = 0; i < nums.length; i++) {
+            prefix += nums[i];
+            int curr = (int)(prefix % p);
+            int target = (curr - need + p) % p;
+
+            if (map.containsKey(target)) {
+                ans = Math.min(ans, i - map.get(target));
+            }
+
+            map.put(curr, i);
         }
 
-        int total_remainder = (int) (total_sum % p);
-        if (total_remainder == 0) return 0;
-
-        long prefix_sum = 0;
-        for (int i = 0; i < n; i++) {
-            prefix_sum += nums[i];
-            int curr_remainder = (int) (prefix_sum % p);
-
-            int target_remainder = (curr_remainder - total_remainder + p) % p;
-            if (map.containsKey(target_remainder)) {
-                int len = i - map.get(target_remainder);
-                res_len = Math.min(res_len, len);
-            }  
-
-            map.put(curr_remainder, i);
-        }
-
-        return (res_len == n) ? -1 : res_len;
+        return ans == nums.length ? -1 : ans;
     }
 }
