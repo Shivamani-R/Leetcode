@@ -13,8 +13,9 @@ class Solution {
 
         int collisions = 0;
         for (int i = left; i <= right; i++) {
-            if (directions.charAt(i) != 'S')
+            if (directions.charAt(i) != 'S'){
                 collisions++;
+            }
         }
         return collisions;
     }
