@@ -11,12 +11,12 @@ class Solution {
             right--;
         }
 
-        int collisions = 0;
+        int count = 0;
         for (int i = left; i <= right; i++) {
             if (directions.charAt(i) != 'S'){
-                collisions++;
+                count++;
             }
         }
-        return collisions;
+        return count;
     }
 }
