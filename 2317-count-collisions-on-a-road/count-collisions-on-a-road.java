@@ -1,18 +1,18 @@
 class Solution {
     public int countCollisions(String directions) {
         int n = directions.length();
-        int left = 0, right = n - 1;
+        int l = 0, r = n - 1;
 
-        while (left < n && directions.charAt(left) == 'L') {
-            left++;
+        while (l < n && directions.charAt(l) == 'L') {
+            l++;
         }
 
-        while (right >= 0 && directions.charAt(right) == 'R') {
-            right--;
+        while (r >= 0 && directions.charAt(r) == 'R') {
+            r--;
         }
 
         int count = 0;
-        for (int i = left; i <= right; i++) {
+        for (int i = l; i <= r; i++) {
             if (directions.charAt(i) != 'S'){
                 count++;
             }
