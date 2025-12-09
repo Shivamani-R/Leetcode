@@ -14,9 +14,9 @@ class Solution {
         for (int val : nums) {
 
             right.put(val, right.get(val) - 1);
-            if (right.get(val) == 0) {
-                right.remove(val);
-            }
+            // if (right.get(val) == 0) {
+            //     right.remove(val);
+            // }
 
             int target = val * 2;
             long leftCount = left.getOrDefault(target, 0);
