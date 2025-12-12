@@ -1,7 +1,7 @@
 class Solution {
     public List<String> validStrings(int n) {
         ArrayList<String> list = new ArrayList<>();
-        generate(n, "", list);
+        generate(n,"", list);
         return list;
     }
 
